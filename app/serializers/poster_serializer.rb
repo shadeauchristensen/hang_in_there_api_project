@@ -1,24 +1,26 @@
 class PosterSerializer
   def self.format_posters(posters)
-    { data: posters.map do |poster|
-      {
-        id: poster.id,
-        type: "Poster",
-        attributes: {
-          name: poster.name,
-          description: poster.description,
-          price: poster.price,
-          year: poster.year,
-          vintage: poster.vintage,
-          img_url: poster.img_url
+    {
+      data: posters.map do |poster|
+        {
+          id: poster.id,
+          type: "Poster",
+          attributes: {
+            name: poster.name,
+            description: poster.description,
+            price: poster.price,
+            year: poster.year,
+            vintage: poster.vintage,
+            img_url: poster.img_url
+          }
         }
-      }
-    end
+      end
     }
   end
 
   def self.format_poster(poster)
-    { data:
+    {
+      data:
       {
         id: poster.id,
         type: "Poster",
@@ -34,6 +36,3 @@ class PosterSerializer
     }
   end
 end
-
-
-

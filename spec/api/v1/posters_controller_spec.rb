@@ -1,18 +1,89 @@
-require "rails_helper.rb"
+require "rails_helper"
 
 RSpec.describe "Posters API", type: :request do
   describe "show" do
-    it "returns a single poster in correct json format" do
-
-    poster_1 = Poster.create!({ #! is used for error handling
-      name: "FAILURE",
-      description: "Why bother trying? It's probably not worth it.",
-      price: 68.00,
-      year: 2019,
-      vintage: true,
-      img_url: "./assets/failure.jpg"
+    it "returns a list of posters in correct json format" do
+      Poster.create!({ # ! is used for error handling
+        name: "FAILURE",
+        description: "Why bother trying? It's probably not worth it.",
+        price: 68.00,
+        year: 2019,
+        vintage: true,
+        img_url: "./assets/failure.jpg"
       })
-    
+      Poster.create!({ # ! is used for error handling
+        name: "MEDIOCRITY",
+        description: "Dreams are just that—dreams.",
+        price: 127.00,
+        year: 2021,
+        vintage: false,
+        img_url: "./assets/mediocrity.jpg"
+      })
+      Poster.create!({ # ! is used for error handling
+        name: "REGRET",
+        description: "Hard work rarely pays off.",
+        price: 89.00,
+        year: 2018,
+        vintage: true,
+        img_url: "./assets/regret.jpg"
+      })
+
+      get "/api/v1/posters"
+
+      expect(response).to be_successful
+
+      response_data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response_data).to be_a(Hash) # office hours, is this redundant
+      expect(response_data).to have_key(:data)
+      expect(response_data[:data]).to be_a(Array)
+
+      posters = response_data[:data]
+
+      expect(posters.count).to eq(3)
+
+      posters.each do |poster|
+        expect(poster).to have_key(:id)
+        expect(poster[:id]).to be_a(Integer)
+
+        expect(poster).to have_key(:type)
+        expect(poster[:type]).to eq("Poster")
+
+        expect(poster).to have_key(:attributes)
+        expect(poster[:attributes]).to be_a(Hash)
+
+        attributes = poster[:attributes]
+
+        expect(attributes).to have_key(:name)
+        expect(attributes[:name]).to be_a(String)
+
+        expect(attributes).to have_key(:description)
+        expect(attributes[:description]).to be_a(String)
+
+        expect(attributes).to have_key(:price)
+        expect(attributes[:price]).to be_a(Float)
+
+        expect(attributes).to have_key(:year)
+        expect(attributes[:year]).to be_a(Integer)
+
+        expect(attributes).to have_key(:vintage)
+        expect(attributes[:vintage]).to be_in([true, false])
+
+        expect(attributes).to have_key(:img_url)
+        expect(attributes[:img_url]).to be_a(String)
+      end
+    end
+
+    it "returns a single poster in correct json format" do
+      poster_1 = Poster.create!({ # ! is used for error handling
+        name: "FAILURE",
+        description: "Why bother trying? It's probably not worth it.",
+        price: 68.00,
+        year: 2019,
+        vintage: true,
+        img_url: "./assets/failure.jpg"
+      })
+
       get "/api/v1/posters/#{poster_1.id}"
 
       expect(response).to be_successful
@@ -51,7 +122,6 @@ RSpec.describe "Posters API", type: :request do
 
       expect(attributes).to have_key(:img_url)
       expect(attributes[:img_url]).to eq("./assets/failure.jpg")
-
     end
   end
 end
