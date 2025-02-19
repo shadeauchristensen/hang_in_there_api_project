@@ -1,18 +1,17 @@
-require "rails_helper.rb"
+require "rails_helper"
 
 RSpec.describe "Posters API", type: :request do
   describe "show" do
     it "returns a single poster in correct json format" do
-
-    poster_1 = Poster.create!({ #! is used for error handling
-      name: "FAILURE",
-      description: "Why bother trying? It's probably not worth it.",
-      price: 68.00,
-      year: 2019,
-      vintage: true,
-      img_url: "./assets/failure.jpg"
+      poster_1 = Poster.create!({ # ! is used for error handling
+        name: "FAILURE",
+        description: "Why bother trying? It's probably not worth it.",
+        price: 68.00,
+        year: 2019,
+        vintage: true,
+        img_url: "./assets/failure.jpg"
       })
-    
+
       get "/api/v1/posters/#{poster_1.id}"
 
       expect(response).to be_successful
@@ -51,7 +50,6 @@ RSpec.describe "Posters API", type: :request do
 
       expect(attributes).to have_key(:img_url)
       expect(attributes[:img_url]).to eq("./assets/failure.jpg")
-
     end
   end
 end
