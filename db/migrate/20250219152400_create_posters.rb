@@ -1,6 +1,6 @@
-class CreateItems < ActiveRecord::Migration[7.1]
+class CreatePosters < ActiveRecord::Migration[7.1]
   def change
-    create_table :items do |t|
+    create_table :posters do |t|
       t.string :name
       t.string :description
       t.float :price
