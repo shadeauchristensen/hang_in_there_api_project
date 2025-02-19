@@ -132,10 +132,10 @@ unmotivational_posters = [
 ]
 
 unmotivational_posters.each do |poster|
-  Poster.create(name: poster.name,
-    description: poster.description,
-    price: poster.price,
-    year: poster.year,
-    vintage: poster.vintage,
-    img_url:  poster.img_url)
+  Poster.create(name: poster[:name],
+    description: poster[:description],
+    price: poster[:price],
+    year: poster[:year],
+    vintage: poster[:vintage],
+    img_url:  poster[:img_url])
 end
