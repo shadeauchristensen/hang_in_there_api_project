@@ -42,6 +42,8 @@ group :development, :test do
   gem "pry-byebug", require: false
   gem "rspec-rails", require: false
   gem "simplecov", require: false
+  gem "active_model_serializers"
+  gem "pgreset"
 end
 
 group :development do
