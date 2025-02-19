@@ -47,7 +47,7 @@ RSpec.describe "Posters API", type: :request do
         expect(poster[:id]).to be_a(Integer)
 
         expect(poster).to have_key(:type)
-        expect(poster[:type]).to eq("Poster")
+        expect(poster[:type]).to eq("poster")
 
         expect(poster).to have_key(:attributes)
         expect(poster[:attributes]).to be_a(Hash)
@@ -98,7 +98,7 @@ RSpec.describe "Posters API", type: :request do
       expect(response_data[:data][:id]).to eq(poster_1.id)
 
       expect(response_data[:data]).to have_key(:type)
-      expect(response_data[:data][:type]).to eq("Poster")
+      expect(response_data[:data][:type]).to eq("poster")
 
       expect(response_data[:data]).to have_key(:attributes)
       expect(response_data[:data][:attributes]).to be_a(Hash)
