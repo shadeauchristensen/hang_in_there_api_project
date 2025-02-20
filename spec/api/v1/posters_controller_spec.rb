@@ -1,18 +1,18 @@
 require "rails_helper"
 
 RSpec.describe "Posters API", type: :request do
-  before(:each) do
+  before do
     @poster = Poster.create!(
-        name: "FAILURE",
-        description: "Why bother trying? It's probably not worth it.",
-        price: 68.00,
-        year: 2019,
-        vintage: true,
-        img_url: "./assets/failure.jpg"
-      )
+      name: "FAILURE",
+      description: "Why bother trying? It's probably not worth it.",
+      price: 68.00,
+      year: 2019,
+      vintage: true,
+      img_url: "./assets/failure.jpg"
+    )
   end
 
-  def parsed_response 
+  def parsed_response
     JSON.parse(response.body, symbolize_names: true)
   end
 
@@ -44,13 +44,13 @@ RSpec.describe "Posters API", type: :request do
 
         attributes = poster[:attributes]
 
-      expect(attributes).to include(          
-        name: @poster.name,
-        description: @poster.description,
-        price: @poster.price,
-        year: @poster.year,
-        vintage: @poster.vintage,
-        img_url: @poster.img_url
+        expect(attributes).to include(
+          name: @poster.name,
+          description: @poster.description,
+          price: @poster.price,
+          year: @poster.year,
+          vintage: @poster.vintage,
+          img_url: @poster.img_url
         )
       end
     end
@@ -102,20 +102,20 @@ RSpec.describe "Posters API", type: :request do
 
       response_data = parsed_response
 
-            expect(response_data[:data]).to include(
+      expect(response_data[:data]).to include(
         id: created_poster.id.to_s,
         type: "poster"
       )
 
       expect(response_data[:data][:attributes]).to include(poster_params)
     end
-  end  
+  end
 
   describe "update" do
     it "updates a poster using correct json format" do
-      updated_params = { "poster" => { "name" => "UPDATED", "description" => "New description." } }
+      updated_params = {"poster" => {"name" => "UPDATED", "description" => "New description."}}
 
-      patch "/api/v1/posters/#{@poster.id}", params: updated_params, as: :json 
+      patch "/api/v1/posters/#{@poster.id}", params: updated_params, as: :json
       # This PATCH request sends an update to an existing Posters record at /api/v1/posters/:id, specifying new values for name and description inside the params.
       # The as: :json option ensures the request body is formatted as JSON, so Rails correctly interprets it as an API request. this made my tests pass
 
@@ -132,7 +132,6 @@ RSpec.describe "Posters API", type: :request do
 
   describe "destroy" do
     it "deletes a poster using correct json format" do
-
       expect(Poster.count).to eq(1)
 
       delete "/api/v1/posters/#{@poster.id}"
