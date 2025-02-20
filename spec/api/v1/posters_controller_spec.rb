@@ -53,6 +53,11 @@ RSpec.describe "Posters API", type: :request do
           img_url: @poster.img_url
         )
       end
+
+      expect(response_data).to have_key(:meta)
+      expect(response_data[:meta]).to be_a(Hash)
+
+      expect(response_data[:meta]).to include(count: 1)
     end
   end
 
