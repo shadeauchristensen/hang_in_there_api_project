@@ -70,6 +70,16 @@ RSpec.describe "Posters API", type: :request do
           poster[:attributes][:created_at]
         end).to eq(parsed_response[:data])
       end
+
+      it "can sort in descending order" do
+        get "/api/v1/posters?sort=desc"
+
+        posters = parsed_response[:data]
+
+        expect(posters.sort_by! do |poster|
+          poster[:attributes][:created_at]
+        end).to eq(parsed_response[:data].reverse)
+      end
     end
   end
 
