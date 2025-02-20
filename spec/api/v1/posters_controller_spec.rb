@@ -59,6 +59,18 @@ RSpec.describe "Posters API", type: :request do
 
       expect(response_data[:meta]).to include(count: 1)
     end
+
+    describe "sort param" do
+      it "sorts in ascending order by default" do
+        get "/api/v1/posters"
+
+        posters = parsed_response[:data]
+
+        expect(posters.sort_by! do |poster|
+          poster[:attributes][:created_at]
+        end).to eq(parsed_response[:data])
+      end
+    end
   end
 
   describe "show" do
