@@ -4,7 +4,7 @@ class PosterSerializer
       data: posters.map do |poster|
         {
           id: poster.id,
-          type: "Poster",
+          type: "poster",
           attributes: {
             name: poster.name,
             description: poster.description,
@@ -23,7 +23,7 @@ class PosterSerializer
       data:
       {
         id: poster.id,
-        type: "Poster",
+        type: "poster",
         attributes: {
           name: poster.name,
           description: poster.description,

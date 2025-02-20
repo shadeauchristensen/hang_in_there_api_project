@@ -47,7 +47,7 @@ RSpec.describe "Posters API", type: :request do
         expect(poster[:id]).to be_a(Integer)
 
         expect(poster).to have_key(:type)
-        expect(poster[:type]).to eq("Poster")
+        expect(poster[:type]).to eq("poster")
 
         expect(poster).to have_key(:attributes)
         expect(poster[:attributes]).to be_a(Hash)
@@ -98,7 +98,7 @@ RSpec.describe "Posters API", type: :request do
       expect(response_data[:data][:id]).to eq(poster_1.id)
 
       expect(response_data[:data]).to have_key(:type)
-      expect(response_data[:data][:type]).to eq("Poster")
+      expect(response_data[:data][:type]).to eq("poster")
 
       expect(response_data[:data]).to have_key(:attributes)
       expect(response_data[:data][:attributes]).to be_a(Hash)
@@ -122,6 +122,65 @@ RSpec.describe "Posters API", type: :request do
 
       expect(attributes).to have_key(:img_url)
       expect(attributes[:img_url]).to eq("./assets/failure.jpg")
+    end
+
+    it "can create a new poster" do
+      poster_params = {
+        name: "FAILURE",
+        description: "Why bother trying? It's probably not worth it.",
+        price: 68.00,
+        year: 2019,
+        vintage: true,
+        img_url: "./assets/failure.jpg"
+      }
+      headers = {"CONTENT_TYPE" => "application/json"} # pass params as JSON rather than plain text
+
+      post "/api/v1/posters", headers: headers, params: JSON.generate(poster: poster_params)
+      created_poster = Poster.last
+
+      expect(response).to be_successful
+
+      expect(created_poster.name).to eq(poster_params[:name])
+      expect(created_poster.description).to eq(poster_params[:description])
+      expect(created_poster.price).to eq(poster_params[:price])
+      expect(created_poster.year).to eq(poster_params[:year])
+      expect(created_poster.vintage).to eq(poster_params[:vintage])
+      expect(created_poster.img_url).to eq(poster_params[:img_url])
+
+      response_data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response_data).to be_a(Hash) # office hours, is this redundant
+      expect(response_data).to have_key(:data)
+      expect(response_data[:data]).to be_a(Hash)
+
+      expect(response_data[:data]).to have_key(:id)
+      expect(response_data[:data][:id]).to eq(created_poster.id)
+
+      expect(response_data[:data]).to have_key(:type)
+      expect(response_data[:data][:type]).to eq("poster")
+
+      expect(response_data[:data]).to have_key(:attributes)
+      expect(response_data[:data][:attributes]).to be_a(Hash)
+
+      attributes = response_data[:data][:attributes]
+
+      expect(attributes).to have_key(:name)
+      expect(attributes[:name]).to eq(poster_params[:name])
+
+      expect(attributes).to have_key(:description)
+      expect(attributes[:description]).to eq(poster_params[:description])
+
+      expect(attributes).to have_key(:price)
+      expect(attributes[:price]).to eq(poster_params[:price])
+
+      expect(attributes).to have_key(:year)
+      expect(attributes[:year]).to eq(poster_params[:year])
+
+      expect(attributes).to have_key(:vintage)
+      expect(attributes[:vintage]).to eq(poster_params[:vintage])
+
+      expect(attributes).to have_key(:img_url)
+      expect(attributes[:img_url]).to eq(poster_params[:img_url])
     end
   end
 end
