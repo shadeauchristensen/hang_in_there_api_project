@@ -167,4 +167,36 @@ RSpec.describe "Posters API", type: :request do
       expect(Poster.count).to eq(0)
     end
   end
+
+  describe "filter" do
+    it "filters posters by name (case-insensitive)" do
+      get "/api/v1/posters?name=re"
+
+      response_data = parsed_response
+
+      expect(response).to be_successful
+      expect(response_data[:data].size).to eq(1)
+      expect(response_data[:data].first[:attributes][:name]).to eq("FAILURE")
+    end
+
+    it "filters posters by price more than 80 dollars" do
+      get "/api/v1/posters?min_price=88.00"
+
+      response_data = parsed_response
+
+      expect(response).to be_successful
+      expect(response_data[:data].size).to eq(0)
+    end
+
+    it "filters posters by price less than 80 dollars" do
+      get "/api/v1/posters?max_price=88.00" do
+
+      response_data = parsed_response
+
+      expect(response).to be_successful
+      expect(response_data[:data].size).to eq(1)
+      expect(response_data[:data].first[:attributes][:name]).to eq("FAILURE")
+      end
+    end
+  end
 end
