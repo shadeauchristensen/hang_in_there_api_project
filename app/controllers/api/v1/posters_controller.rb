@@ -1,6 +1,9 @@
 class Api::V1::PostersController < ApplicationController
   def index
     posters = Poster.sort(params[:sort])
+    if params[:name].present? || params[:min_price].present? || params[:max_price].present?
+      posters = Poster.filter(params)
+    end
     options = {meta: {count: posters.length}}
     render json: PosterSerializer.new(posters, options)
   end
