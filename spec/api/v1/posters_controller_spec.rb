@@ -61,14 +61,32 @@ RSpec.describe "Posters API", type: :request do
     end
 
     describe "sort param" do
+      before do
+        @poster2 = Poster.create!(
+          name: "MEDIOCRITY",
+          description: "Dreams are just that—dreams.",
+          price: 127.00,
+          year: 2021,
+          vintage: false,
+          img_url: "./assets/mediocrity.jpg"
+        )
+        @poster3 = Poster.create!(
+          name: "REGRET",
+          description: "Hard work rarely pays off.",
+          price: 89.00,
+          year: 2018,
+          vintage: true,
+          img_url: "./assets/regret.jpg"
+        )
+      end
+
       it "sorts in ascending order by default" do
         get "/api/v1/posters"
 
         posters = parsed_response[:data]
 
-        expect(posters.sort_by! do |poster|
-          poster[:attributes][:created_at]
-        end).to eq(parsed_response[:data])
+        expect(posters.first[:attributes][:name]).to eq("FAILURE")
+        expect(posters.last[:attributes][:name]).to eq("REGRET")
       end
 
       it "can sort in descending order" do
@@ -76,9 +94,8 @@ RSpec.describe "Posters API", type: :request do
 
         posters = parsed_response[:data]
 
-        expect(posters.sort_by! do |poster|
-          poster[:attributes][:created_at]
-        end).to eq(parsed_response[:data].reverse)
+        expect(posters.first[:attributes][:name]).to eq("REGRET")
+        expect(posters.last[:attributes][:name]).to eq("FAILURE")
       end
     end
   end
